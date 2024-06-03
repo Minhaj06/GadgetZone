@@ -1,0 +1,46 @@
+import { useState, createContext, useContext, useEffect } from "react";
+import axios from "axios";
+
+const AuthContext = createContext();
+
+const AuthProvider = ({ children }) => {
+  const [auth, setAuth] = useState({
+    user: null,
+    token: "",
+  });
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  // axios config
+  axios.defaults.baseURL = process.env.REACT_APP_API;
+  axios.defaults.headers.common["Authorization"] = auth?.token;
+
+  // const showLoader = () => {
+  //   setIsLoading(true);
+  // };
+
+  // const hideLoader = () => {
+  //   setIsLoading(false);
+  // };
+
+  useEffect(() => {
+    const data = localStorage.getItem("auth");
+
+    if (data) {
+      const parsed = JSON.parse(data);
+      setAuth({ ...auth, user: parsed.user, token: parsed.token });
+    }
+
+    setIsLoading(false);
+  }, []);
+
+  return (
+    <AuthContext.Provider value={{ auth, setAuth, isLoading, setIsLoading }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+const useAuth = () => useContext(AuthContext);
+
+export { useAuth, AuthProvider };

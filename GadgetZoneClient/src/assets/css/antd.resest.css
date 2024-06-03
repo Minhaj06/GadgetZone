@@ -1,0 +1,17 @@
+.custom-slider .ant-slider-track {
+  background-color: var(--themeColor) !important;
+}
+.custom-slider .ant-slider-handle::after {
+  box-shadow: 0 0 0 3px #ff6b6b80 !important;
+}
+.custom-slider .ant-slider-handle:hover::after {
+  box-shadow: 0 0 0 4px var(--themeColor) !important;
+}
+
+.ant-modal-root .ant-modal-mask {
+  z-index: 1060 !important;
+}
+
+.ant-modal-root .ant-modal-wrap {
+  z-index: 1070 !important;
+}

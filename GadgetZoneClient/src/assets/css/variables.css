@@ -1,0 +1,20 @@
+:root {
+  /* colors */
+  --themeColor: #ff6b6b;
+  --themeColorSecondary: #794afa;
+  --themeColorSecondaryDark: #453c5c;
+
+  --textColor: #666666;
+  --lightColor: #7c899a;
+  --lightColor2: #f2f3f5;
+  /* --lightColor3: #ecf1f1; */
+  --lightColor3: #eaecf2;
+  --borderColor: #e5e8ec;
+  --darkColor: #0a021c;
+  --whiteColor: #ffffff;
+  --blackColor: #000000;
+
+  /* font */
+  --fontPoppins: "Poppins", sans-serif;
+  --fontRubik: "Rubik", sans-serif;
+}

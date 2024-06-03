@@ -1,0 +1,22 @@
+@media (min-width: 992px) {
+  .searchBox .searchInput {
+    width: 30rem !important;
+    max-width: 30rem !important;
+  }
+}
+@media (min-width: 1400px) {
+  .searchBox .searchInput {
+    width: 33rem !important;
+    max-width: 33rem !important;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .searchBox {
+    width: 100%;
+  }
+
+  .searchBox .searchInput {
+    width: auto;
+  }
+}

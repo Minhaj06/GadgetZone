@@ -1,0 +1,163 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Rubik:wght@300;400;500;600;700&display=swap");
+
+*,
+::after,
+::before {
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  box-sizing: border-box;
+  /* transition: all 0.2s linear; */
+}
+
+html {
+  font-size: 62.5%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--fontRubik);
+  color: var(--darkColor);
+  font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 1.2;
+  border-color: var(--borderColor);
+  overflow-x: hidden;
+}
+
+.container,
+.container-fluid,
+.container-lg,
+.container-md,
+.container-sm,
+.container-xl,
+.container-xxl {
+  padding-right: var(--bs-gutter-x, 1.5rem);
+  padding-left: var(--bs-gutter-x, 1.5rem);
+}
+
+@media (min-width: 1500px) {
+  .container-fluid {
+    padding-right: var(--bs-gutter-x, 5rem);
+    padding-left: var(--bs-gutter-x, 5rem);
+  }
+}
+
+.table {
+  font-size: 1.6rem;
+}
+.table > :not(caption) > * > * {
+  padding: 1rem 1rem;
+}
+
+p {
+  font-size: 1.6rem;
+  font-weight: normal;
+  line-height: 1.2;
+}
+
+ul,
+ol {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.form-control {
+  border-color: var(--borderColor);
+}
+
+.form-control:focus {
+  /* box-shadow: 0 0 0 0.25rem #ff6b6b75; */
+  box-shadow: none;
+  border-color: var(--lightColor);
+}
+
+button,
+.btn,
+.form-select {
+  border: none;
+  box-shadow: none;
+  font-size: 1.6rem;
+}
+
+a {
+  text-decoration: none;
+  color: var(--darkColor);
+}
+
+a:hover {
+  color: var(--darkColor);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+select {
+  box-shadow: none !important;
+}
+
+/* Bootstrap overriding */
+.nav-link {
+  transition: 0.2s;
+  color: var(--themeColorSecondaryDark);
+}
+.nav-link:hover {
+  color: var(--themeColor) !important;
+}
+.nav-link.active {
+  color: var(--themeColor) !important;
+}
+
+.navbar .nav-link {
+  font-weight: 500;
+}
+
+.form-control {
+  font-size: 1.6rem;
+}
+
+.removeToggleIcon::after {
+  display: none !important;
+}
+.form-check-input:checked {
+  background-color: var(--themeColor);
+  border-color: var(--themeColor);
+}
+.form-check-input:focus {
+  border-color: var(--themeColor);
+  box-shadow: 0 0 0 0.25rem #ff6b6b75;
+}
+.dropdown-item.active,
+.dropdown-item:active {
+  background-color: var(--themeColor);
+}
+
+@media (min-width: 992px) {
+  .offcanvas-lg .offcanvas-body {
+    display: none !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  html {
+    font-size: 58%;
+  }
+}
+@media (max-width: 450px) {
+  html {
+    font-size: 54%;
+  }
+}
+@media (max-width: 380px) {
+  html {
+    font-size: 52%;
+  }
+}
+@media (max-width: 350px) {
+  html {
+    font-size: 50%;
+  }
+}

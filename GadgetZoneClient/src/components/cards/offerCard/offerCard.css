@@ -1,0 +1,17 @@
+.offerCard.productCard:not(.trendingProductCard) img {
+  height: 38rem;
+  max-height: 38rem;
+}
+
+.offerCard:hover {
+  transform: scale(1);
+}
+
+.offerCard.productCard .productIcon {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+.offerCard.productCard:hover img {
+  transform: scale(1.075);
+}
