@@ -3,7 +3,7 @@
   overflow: hidden;
 }
 
-.productCard:hover {
+.productCard:not(.trendingProductCard):hover {
   transform: scale(1.03);
 }
 .productCard .lazy-load-image-loaded {

@@ -3,6 +3,7 @@ import AllRoutes from "./AllRoutes";
 import { Toaster } from "react-hot-toast";
 import { ConfigProvider } from "antd";
 import FullScreenLoader from "./components/FullScreenLoader";
+import { SkeletonTheme } from "react-loading-skeleton";
 
 const App = () => {
   return (
@@ -15,9 +16,11 @@ const App = () => {
         },
       }}
     >
-      <FullScreenLoader />
-      <Toaster />
-      <AllRoutes></AllRoutes>
+      <SkeletonTheme color="#cac9c9" baseColor="#dad9d9" highlightColor="#e6e6e6">
+        <FullScreenLoader />
+        <Toaster />
+        <AllRoutes></AllRoutes>
+      </SkeletonTheme>
     </ConfigProvider>
   );
 };

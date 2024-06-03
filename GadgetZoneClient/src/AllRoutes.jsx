@@ -54,7 +54,7 @@ const AllRoutes = () => {
               <Route element={<PrivateRoute />}>
                 <Route path="/checkout/payment" element={<Payment />} />
               </Route>
-              <Route path="/calculate" element={<Calculate />} />
+              {/* <Route path="/calculate" element={<Calculate />} /> */}
               <Route path="/search" element={<Search />} />
               <Route path="/product/:slug" element={<ProductDetails />} />
 
@@ -77,7 +77,6 @@ const AllRoutes = () => {
               <Route element={<AdminLayout />}>
                 <Route path="" element={<AdminDashboard />} />
                 <Route path="category" element={<Category />} />
-
                 <Route path="product" element={<Product />} />
                 <Route path="products" element={<Products />} />
               </Route>

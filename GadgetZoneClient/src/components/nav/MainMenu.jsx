@@ -20,7 +20,7 @@ const mainMenuItems = [
   { _id: 4, label: "Women", to: "/category/women", megaMenu: true },
   { _id: 5, label: "Men", to: "/category/men" },
   { _id: 6, label: "Sports", to: "/category/sports" },
-  { _id: 7, label: "Calculate", to: "/calculate" },
+  // { _id: 7, label: "Calculate", to: "/calculate" },
 ];
 
 const MainMenu = ({ categories, subcategories }) => {
@@ -57,20 +57,20 @@ const MainMenu = ({ categories, subcategories }) => {
     setTotalPrice(totalAmount);
   }, [cart]);
 
-  // const mediaQueryThreshold = 768;
-  // const handleWindowResize = () => {
-  //   const windowWidth = window.innerWidth;
+  const mediaQueryThreshold = 992;
+  const handleWindowResize = () => {
+    const windowWidth = window.innerWidth;
 
-  //   setShowMenuOffcanvas(windowWidth < mediaQueryThreshold);
-  // };
+    setShowMenuOffcanvas(false);
+  };
 
-  // useEffect(() => {
-  //   window.addEventListener("resize", handleWindowResize);
+  useEffect(() => {
+    window.addEventListener("resize", handleWindowResize);
 
-  //   return () => {
-  //     window.removeEventListener("resize", handleWindowResize);
-  //   };
-  // }, []);
+    return () => {
+      window.removeEventListener("resize", handleWindowResize);
+    };
+  }, []);
 
   return (
     <>
@@ -389,7 +389,7 @@ const MainMenu = ({ categories, subcategories }) => {
         className="mb-3 mb-sm-4 position-sticky top-0 start-0 static-lg"
         bg="white"
         expand="lg"
-        style={{ zIndex: 1020 }}
+        style={{ zIndex: 999 }}
       >
         <Container>
           <Navbar.Brand className="me-5">

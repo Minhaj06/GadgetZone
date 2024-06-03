@@ -3,8 +3,9 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth";
 import axios from "axios";
 import Loading from "./Loading";
+import logout from "../../utils/logout";
 
-const AdminRoute = () => {
+const PrivateRoute = () => {
   // context
   const { auth, setAuth } = useAuth();
 
@@ -16,27 +17,28 @@ const AdminRoute = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const adminCheck = async () => {
+    const authCheck = async () => {
       try {
-        const { data } = await axios.get(`/admin-check`);
+        const { data } = await axios.get(`/auth-check`);
 
         if (data.ok) {
           setOk(true);
         } else {
           setOk(false);
-          navigate(-1, {
+          navigate("/login", {
             state: location.pathname,
           });
         }
       } catch (err) {
-        console.log(err);
-        navigate(-1, {
-          state: location.pathname,
-        });
+        if (err.response.status === 401) {
+          logout(auth, setAuth, navigate);
+        } else {
+          console.log(err);
+        }
       }
     };
 
-    if (auth?.token) adminCheck();
+    if (auth?.token) authCheck();
     else
       setTimeout(() => {
         navigate("/login", {
@@ -48,4 +50,4 @@ const AdminRoute = () => {
   return ok ? <Outlet /> : <Loading />;
 };
 
-export default AdminRoute;
+export default PrivateRoute;

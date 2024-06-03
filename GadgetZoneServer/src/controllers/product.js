@@ -66,7 +66,7 @@ const gateway = new braintree.BraintreeGateway({
 //   }
 // };
 
-// Create Product With Multiple Image
+// Create Product With Multiple Images
 exports.create = async (req, res) => {
   try {
     const { name, description, price, category, subcategory, quantity, isFeatured, shipping } =

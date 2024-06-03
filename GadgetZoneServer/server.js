@@ -10,14 +10,14 @@ const cors = require("cors");
 require("dotenv").config();
 
 // Middlewares
-// app.use(
-//   cors({
-//     origin: "https://gadgetzone.vercel.app", // Specify the allowed origin(s)
-//     methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Specify the allowed HTTP methods
-//     credentials: true, // Allow cookies and credentials
-//   })
-// );
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+  })
+);
+// app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(helmet());

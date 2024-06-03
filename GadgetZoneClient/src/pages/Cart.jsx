@@ -7,7 +7,7 @@ import { addToCart, removeFromCart } from "../utils/cart";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { useAuth } from "../context/auth";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
 
@@ -488,9 +488,15 @@ const Cart = () => {
                       </tr>
                     ))
                   ) : (
-                    <tr className="text-center fs-1">
+                    <tr>
                       <td className="fs-1 py-5" colSpan={4}>
-                        No product in cart. 😔
+                        <div className="text-center py-5">
+                          <h2 className="h1">No product in cart. 😔</h2>
+                          <p>It seems like you haven't added any product yet.</p>
+                          <Link to="/shop" className="btn btnDark py-3 px-5 mt-4">
+                            Shop Now
+                          </Link>
+                        </div>
                       </td>
                     </tr>
                   )}

@@ -11,6 +11,7 @@ const {
   updateProfile,
   secret,
   getOrders,
+  allOrders,
 } = require("../controllers/auth.js");
 
 // Routes
@@ -31,6 +32,6 @@ router.get("/secret", requireSignin, isAdmin, secret);
 
 // Orders
 router.get("/orders", requireSignin, getOrders);
-router.get("/all-orders", requireSignin, isAdmin, getOrders);
+router.get("/all-orders", requireSignin, isAdmin, allOrders);
 
 module.exports = router;

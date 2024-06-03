@@ -155,8 +155,8 @@ exports.updateProfile = async (req, res) => {
 exports.getOrders = async (req, res) => {
   try {
     const orders = await Order.find({ buyer: req.user._id })
-      .populate("products", "-photo")
-      .populate("buyer", "name");
+      .populate("products", "-photos")
+      .populate("buyer", "firstName lastName");
 
     res.json(orders);
   } catch (err) {
@@ -168,8 +168,8 @@ exports.getOrders = async (req, res) => {
 exports.allOrders = async (req, res) => {
   try {
     const orders = await Order.find({})
-      .populate("products", "-photo")
-      .populate("buyer", "name")
+      .populate("products", "-photos")
+      .populate("buyer", "firstName lastName")
       .sort({ createdAt: "-1" });
 
     res.json(orders);
