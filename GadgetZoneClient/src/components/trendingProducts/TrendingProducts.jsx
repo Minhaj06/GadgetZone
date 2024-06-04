@@ -36,7 +36,7 @@ const TrendingProducts = () => {
       rating: 434,
       photo:
         "https://mern-ecom-server.vercel.app/api/v1/product/photo/64fc9ea63a045402c10358a9",
-      offerEndDate: "2023-12-28T20:45:13.578Z",
+      offerEndDate: "2024-06-28T20:45:13.578Z",
     },
     {
       _id: "64fca5603a045402c1035c1f",

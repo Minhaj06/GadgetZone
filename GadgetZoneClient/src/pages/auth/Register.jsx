@@ -1,12 +1,13 @@
-import { useState } from "react";
-import Jumbotron from "../../components/cards/Jumbotron";
+import React, { useState } from "react";
+import { Form, Input, Button } from "antd";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useAuth } from "../../context/auth";
-import { useNavigate } from "react-router-dom";
+import SocialLogin from "../../components/socialLogin/SocialLogin";
 
 const Register = () => {
-  // state
+  // states
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -42,54 +43,92 @@ const Register = () => {
   };
 
   return (
-    <div>
-      <Jumbotron title="Register" />
-      <div className="container mt-5">
-        <div className="row">
-          <div className="col-md-6 offset-md-3">
-            <form onSubmit={handleSubmit}>
-              <input
-                type="text"
-                className="form-control mb-4"
-                placeholder="Enter first name"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                autoFocus
-              />
+    <section style={{ margin: "7rem 0" }}>
+      <div className="container">
+        <div className="row g-0 justify-content-center">
+          <div className="col-lg-6 col-xl-5">
+            <div className="bgLight2 border rounded-5 p-5 shadow-sm">
+              <h2 className="text-center display-5 mb-5">Registration</h2>
 
-              <input
-                type="text"
-                className="form-control mb-4"
-                placeholder="Enter last name"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                autoFocus
-              />
+              <Form name="login" initialValues={{ email, password }} onFinish={handleSubmit}>
+                <Form.Item
+                  label={<span className="fs-4">First Name</span>}
+                  name="firstName"
+                  labelCol={{ span: 24 }}
+                  wrapperCol={{ span: 24 }}
+                  rules={[{ required: true, message: "Please input your First Name!" }]}
+                >
+                  <Input
+                    size="large"
+                    placeholder="First Name"
+                    onChange={(e) => setFirstName(e.target.value)}
+                  />
+                </Form.Item>
 
-              <input
-                type="email"
-                className="form-control mb-4"
-                placeholder="Enter email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+                <Form.Item
+                  label={<span className="fs-4">Last Name</span>}
+                  name="lastName"
+                  labelCol={{ span: 24 }}
+                  wrapperCol={{ span: 24 }}
+                  rules={[{ required: true, message: "Please input your Last Name!" }]}
+                >
+                  <Input
+                    size="large"
+                    placeholder="Last Name"
+                    onChange={(e) => setLastName(e.target.value)}
+                  />
+                </Form.Item>
 
-              <input
-                type="password"
-                className="form-control mb-4"
-                placeholder="Enter password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+                <Form.Item
+                  label={<span className="fs-4">Email</span>}
+                  name="email"
+                  labelCol={{ span: 24 }}
+                  wrapperCol={{ span: 24 }}
+                  rules={[{ required: true, message: "Please input your Email!" }]}
+                >
+                  <Input
+                    size="large"
+                    placeholder="Email"
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </Form.Item>
 
-              <button className="btn btn-info float-end" type="submit">
-                Submit
-              </button>
-            </form>
+                <Form.Item
+                  label={<span className="fs-4">Password</span>}
+                  name="password"
+                  labelCol={{ span: 24 }}
+                  wrapperCol={{ span: 24 }}
+                  rules={[{ required: true, message: "Please input your Password!" }]}
+                >
+                  <Input.Password
+                    size="large"
+                    placeholder="Password"
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </Form.Item>
+
+                <Form.Item wrapperCol={{ span: 24 }}>
+                  <Button type="primary" htmlType="submit" size="large" block>
+                    Register Now
+                  </Button>
+                </Form.Item>
+              </Form>
+
+              <div style={{ textAlign: "center", marginBottom: "1rem" }}>
+                <p>
+                  Already have an account?{" "}
+                  <Link className="themeColor" to="/login">
+                    Login Now
+                  </Link>
+                </p>
+              </div>
+
+              <SocialLogin />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

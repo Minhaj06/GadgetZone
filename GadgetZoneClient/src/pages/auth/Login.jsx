@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Form, Input, Button, Divider } from "antd";
-import { GoogleOutlined, FacebookOutlined } from "@ant-design/icons";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useAuth } from "../../context/auth";
+import SocialLogin from "../../components/socialLogin/SocialLogin";
 
 const Login = () => {
   const { auth, setAuth } = useAuth();
@@ -80,36 +80,12 @@ const Login = () => {
                 <p>
                   Don't have an account?{" "}
                   <Link className="themeColor" to="/register">
-                    Register now
+                    Register Now
                   </Link>
                 </p>
               </div>
 
-              <Divider
-                className="py-4"
-                style={{
-                  borderColor: "var(--lightColor)",
-                  borderWidth: "2px",
-                }}
-              >
-                OR
-              </Divider>
-
-              <Button
-                className="d-flex justify-content-center align-items-center w-100 mb-4"
-                size="large"
-              >
-                <GoogleOutlined style={{ color: "#0F9D58" }} />
-                <span>Login With Google</span>
-              </Button>
-
-              <Button
-                className="d-flex justify-content-center align-items-center w-100"
-                size="large"
-              >
-                <FacebookOutlined style={{ color: "#4267B2" }} />
-                <span>Login With Facebook</span>
-              </Button>
+              <SocialLogin />
             </div>
           </div>
         </div>
