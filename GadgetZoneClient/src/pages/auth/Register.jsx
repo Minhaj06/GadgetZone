@@ -17,15 +17,9 @@ const Register = () => {
   const { auth, setAuth } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (values) => {
     try {
-      const { data } = await axios.post(`/register`, {
-        firstName,
-        lastName,
-        email,
-        password,
-      });
+      const { data } = await axios.post(`/register`, values);
       console.log(data);
 
       if (data?.error) {
@@ -50,7 +44,11 @@ const Register = () => {
             <div className="bgLight2 border rounded-5 p-5 shadow-sm">
               <h2 className="text-center display-5 mb-5">Registration</h2>
 
-              <Form name="login" initialValues={{ email, password }} onFinish={handleSubmit}>
+              <Form
+                name="login"
+                initialValues={{ firstName, lastName, email, password }}
+                onFinish={handleSubmit}
+              >
                 <Form.Item
                   label={<span className="fs-4">First Name</span>}
                   name="firstName"
