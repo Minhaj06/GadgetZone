@@ -16,6 +16,7 @@ const Register = () => {
   // hooks
   const { auth, setAuth } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSubmit = async (values) => {
     try {
@@ -28,7 +29,8 @@ const Register = () => {
         localStorage.setItem("auth", JSON.stringify(data));
         setAuth({ ...auth, token: data.token, user: data.user });
         toast.success("Registration successful");
-        navigate("/");
+
+        navigate(location.state || "/");
       }
     } catch (err) {
       console.log(err);

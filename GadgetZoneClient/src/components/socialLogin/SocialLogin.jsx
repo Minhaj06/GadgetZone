@@ -17,7 +17,6 @@ const SocialLogin = () => {
   const { auth, setAuth, setIsLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
 
   // Social Login
   const fireAuth = getAuth(app);
@@ -53,7 +52,9 @@ const SocialLogin = () => {
           setAuth({ ...auth, token: data.token, user: data.user });
 
           setIsLoading(false);
-          navigate(from, { replace: true });
+          navigate(
+            location.state || `/dashboard/${data?.user?.role === 1 ? "admin" : "user"}`
+          );
           toast.success("Successfully Logged In");
         }
       })
@@ -63,21 +64,21 @@ const SocialLogin = () => {
       });
   };
 
-  const handleLoginWithFacebook = () => {
-    setIsLoading(true);
+  // const handleLoginWithFacebook = () => {
+  //   setIsLoading(true);
 
-    signInWithPopup(fireAuth, facebookProvider)
-      .then((result) => {
-        const user = result.user;
-        setIsLoading(false);
-        navigate(from, { replace: true });
-        toast.success("Successfully Logged In");
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        toast.error(error.message);
-      });
-  };
+  //   signInWithPopup(fireAuth, facebookProvider)
+  //     .then((result) => {
+  //       const user = result.user;
+  //       setIsLoading(false);
+  //       navigate(location.state || `/dashboard/${data?.user?.role === 1 ? "admin" : "user"}`);
+  //       toast.success("Successfully Logged In");
+  //     })
+  //     .catch((error) => {
+  //       setIsLoading(false);
+  //       toast.error(error.message);
+  //     });
+  // };
 
   return (
     <div>
@@ -101,7 +102,7 @@ const SocialLogin = () => {
         </Button>
 
         <Button
-          onClick={handleLoginWithFacebook}
+          // onClick={handleLoginWithFacebook}
           className="d-flex justify-content-center align-items-center w-100"
           size="large"
         >

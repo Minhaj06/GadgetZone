@@ -34,7 +34,7 @@ mongoose
   .connect(process.env.DATABASE, OPTION)
   .then(() => {
     app.listen(port, () => {
-      console.log(`Server is running on port ${port}`);
+      console.log(`GadgetZone server is running on port ${port}`);
     });
   })
   .catch((err) => console.log(err));
