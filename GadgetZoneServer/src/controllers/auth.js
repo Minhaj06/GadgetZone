@@ -129,22 +129,31 @@ exports.firebaseLogin = async (req, res) => {
 
     // Check if email is taken / Check existing user
     let user = await User.findOne({ email });
-    if (user) {
-      const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: "7d",
-      });
 
-      // Send response if user exists
-      return res.json({
-        user: {
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          role: user.role,
-          address: user.address,
-        },
-        token,
-      });
+    if (user) {
+      console.log("User.......");
+      // Match Password
+      const match = await comparePassword(password, user.password);
+      console.log("match.....", match);
+      if (!match) {
+        return res.json({ error: "This email is already taken" });
+      } else {
+        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+          expiresIn: "7d",
+        });
+
+        // Send response if user exists
+        return res.json({
+          user: {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            role: user.role,
+            address: user.address,
+          },
+          token,
+        });
+      }
     }
 
     // Hash password

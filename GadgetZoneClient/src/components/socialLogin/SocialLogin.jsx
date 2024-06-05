@@ -64,21 +64,47 @@ const SocialLogin = () => {
       });
   };
 
-  // const handleLoginWithFacebook = () => {
-  //   setIsLoading(true);
+  const handleLoginWithFacebook = () => {
+    setIsLoading(true);
 
-  //   signInWithPopup(fireAuth, facebookProvider)
-  //     .then((result) => {
-  //       const user = result.user;
-  //       setIsLoading(false);
-  //       navigate(location.state || `/dashboard/${data?.user?.role === 1 ? "admin" : "user"}`);
-  //       toast.success("Successfully Logged In");
-  //     })
-  //     .catch((error) => {
-  //       setIsLoading(false);
-  //       toast.error(error.message);
-  //     });
-  // };
+    signInWithPopup(fireAuth, facebookProvider)
+      .then(async (result) => {
+        const loggedUser = result.user;
+
+        const saveUser = {
+          firstName: "",
+          lastName: "",
+          email: loggedUser.email || prompt("Please enter your email: "),
+          password: "MINHAJ@DESKTOP-F7N5FEH",
+        };
+
+        // Extract first and last names from displayName
+        const displayNameArray = loggedUser.displayName.split(" ");
+        saveUser.lastName = displayNameArray.pop();
+        saveUser.firstName = displayNameArray.join(" ");
+
+        const { data } = await axios.post("/firebase-login", saveUser);
+
+        if (data?.error) {
+          toast.error(data.error);
+          setIsLoading(false);
+        } else {
+          localStorage.setItem("auth", JSON.stringify(data));
+          setAuth({ ...auth, token: data.token, user: data.user });
+
+          setIsLoading(false);
+          navigate(
+            location.state || `/dashboard/${data?.user?.role === 1 ? "admin" : "user"}`
+          );
+          toast.success("Successfully Logged In");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+        toast.error(error.message);
+      });
+  };
 
   return (
     <div>
@@ -102,7 +128,7 @@ const SocialLogin = () => {
         </Button>
 
         <Button
-          // onClick={handleLoginWithFacebook}
+          onClick={handleLoginWithFacebook}
           className="d-flex justify-content-center align-items-center w-100"
           size="large"
         >
