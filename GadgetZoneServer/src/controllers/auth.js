@@ -57,11 +57,6 @@ exports.register = async (req, res) => {
       token,
     });
   } catch (err) {
-    console.log("===================================>>>>>>>>>>>>>>>>");
-    console.log("===================================>>>>>>>>>>>>>>>>");
-    console.log(err);
-    console.log("======================================>>>>>>>>>");
-    console.log("======================================>>>>>>>>>");
     return res.status(400).json(err.message);
   }
 };
@@ -109,6 +104,77 @@ exports.login = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    return res.status(400).json(err.message);
+  }
+};
+
+exports.firebaseLogin = async (req, res) => {
+  try {
+    // Destructure name, email, password from req.body
+    const { firstName, lastName, email, password } = req.body;
+
+    // All fields require validation
+    if (!firstName.trim()) {
+      return res.json({ error: "First name is required" });
+    }
+    if (!lastName.trim()) {
+      return res.json({ error: "Last name is required" });
+    }
+    if (!email.trim()) {
+      return res.json({ error: "Email is required" });
+    }
+    if (!password.trim()) {
+      return res.json({ error: "Password is required" });
+    }
+
+    // Check if email is taken / Check existing user
+    let user = await User.findOne({ email });
+    if (user) {
+      const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: "7d",
+      });
+
+      // Send response if user exists
+      return res.json({
+        user: {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          role: user.role,
+          address: user.address,
+        },
+        token,
+      });
+    }
+
+    // Hash password
+    const hashedPassword = await hashPassword(password);
+
+    // Register user / Save user details
+    user = await new User({
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
+    }).save();
+
+    // Create signed jwt
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    // Send response if user is newly registered
+    return res.json({
+      user: {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role,
+        address: user.address,
+      },
+      token,
+    });
+  } catch (err) {
     return res.status(400).json(err.message);
   }
 };

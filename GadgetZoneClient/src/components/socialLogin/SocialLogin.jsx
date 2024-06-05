@@ -14,36 +14,48 @@ import { Button, Divider } from "antd";
 import { GoogleOutlined, FacebookOutlined } from "@ant-design/icons";
 
 const SocialLogin = () => {
-  const { setIsLoading } = useAuth();
+  const { auth, setAuth, setIsLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
 
   // Social Login
-  const auth = getAuth(app);
+  const fireAuth = getAuth(app);
   const googleProvider = new GoogleAuthProvider();
   const facebookProvider = new FacebookAuthProvider();
 
   const handleLoginWithGoogle = () => {
     setIsLoading(true);
 
-    signInWithPopup(auth, googleProvider)
+    signInWithPopup(fireAuth, googleProvider)
       .then(async (result) => {
         const loggedUser = result.user;
-        console.log(loggedUser);
 
         const saveUser = {
-          name: loggedUser.displayName,
+          firstName: "",
+          lastName: "",
           email: loggedUser.email,
-          photoURL: loggedUser.photoURL,
+          password: "MINHAJ@DESKTOP-F7N5FEH",
         };
 
-        const { data } = await axios.post("/users", saveUser);
-        console.log(data);
+        // Extract first and last names from displayName
+        const displayNameArray = loggedUser.displayName.split(" ");
+        saveUser.lastName = displayNameArray.pop();
+        saveUser.firstName = displayNameArray.join(" ");
 
-        setIsLoading(false);
-        navigate(from, { replace: true });
-        toast.success("Successfully Logged In");
+        const { data } = await axios.post("/firebase-login", saveUser);
+        console.log("data=>", data);
+        if (data?.error) {
+          toast.error(data.error);
+          setIsLoading(false);
+        } else {
+          localStorage.setItem("auth", JSON.stringify(data));
+          setAuth({ ...auth, token: data.token, user: data.user });
+
+          setIsLoading(false);
+          navigate(from, { replace: true });
+          toast.success("Successfully Logged In");
+        }
       })
       .catch((error) => {
         setIsLoading(false);
@@ -54,7 +66,7 @@ const SocialLogin = () => {
   const handleLoginWithFacebook = () => {
     setIsLoading(true);
 
-    signInWithPopup(auth, facebookProvider)
+    signInWithPopup(fireAuth, facebookProvider)
       .then((result) => {
         const user = result.user;
         setIsLoading(false);

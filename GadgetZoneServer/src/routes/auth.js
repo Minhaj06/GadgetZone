@@ -12,11 +12,13 @@ const {
   secret,
   getOrders,
   allOrders,
+  firebaseLogin,
 } = require("../controllers/auth.js");
 
 // Routes
 router.post("/register", register);
 router.post("/login", login);
+router.post("/firebase-login", firebaseLogin);
 
 router.get("/auth-check", requireSignin, (req, res) => {
   res.json({ ok: true });
