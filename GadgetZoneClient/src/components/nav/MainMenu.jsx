@@ -6,12 +6,13 @@ import { FaSitemap } from "react-icons/fa";
 import { BiCategory } from "react-icons/bi";
 import { Link, NavLink } from "react-router-dom";
 import MegaMenu from "../megaMenu/MegaMunu";
-import { useCart } from "../../context/cart";
 import { Collapse, Container, Nav, Navbar, Offcanvas } from "react-bootstrap";
 import { ReactComponent as CategoryIcon } from "../../assets/icons/categoryIcon.svg";
 import { BsChevronRight } from "react-icons/bs";
 import ImageLazyLoad from "../../utils/ImageLazyLoad";
 import { IoClose } from "react-icons/io5";
+import { useCart } from "../../context/cart";
+import { useWishlist } from "../../context/wishlist";
 import { removeFromCart } from "../../utils/cart";
 
 const mainMenuItems = [
@@ -26,10 +27,12 @@ const mainMenuItems = [
 const MainMenu = ({ categories, subcategories }) => {
   // Context
   const [cart, setCart] = useCart();
+  const [wishlist, setWishlist] = useWishlist();
 
   // state
   const [showMenuOffcanvas, setShowMenuOffcanvas] = useState(false);
   const [showCartOffcanvas, setShowCartOffcanvas] = useState(false);
+  const [showWishlistOffcanvas, setShowWishlistOffcanvas] = useState(false);
   const [showCategories, setShowCategories] = useState(false);
   const [activeSubmenu, setActiveSubmenu] = useState(null);
   const [activeSubcategoryCollapse, setActiveSubcategoryCollapse] = useState(null);
@@ -385,6 +388,101 @@ const MainMenu = ({ categories, subcategories }) => {
         </Offcanvas.Body>
       </Offcanvas>
 
+      {/* Wishlist Offcanvas */}
+      <Offcanvas
+        show={showWishlistOffcanvas}
+        onHide={() => setShowWishlistOffcanvas(false)}
+        placement="end"
+      >
+        <Offcanvas.Header className="p-20 border-bottom" closeButton>
+          <Offcanvas.Title className="fs-2 fw-medium lightColor">{`${String(
+            cart.length
+          ).padStart(2, "0")} items in wishlist`}</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body className="p-20">
+          <div>
+            {cart.length > 0 ? (
+              cart.map((product) => (
+                <div className="d-flex justify-content-between gap-4 mb-20" key={product?._id}>
+                  <div>
+                    <Link to={`/product/${product?.slug}`}>
+                      <ImageLazyLoad
+                        style={{ width: "8rem", height: "8rem", borderRadius: "3px" }}
+                        src={`${process.env.REACT_APP_API}/product/photo/${product?._id}`}
+                        alt={product?.name}
+                      />
+                    </Link>
+                  </div>
+                  <div className="flex-grow-1">
+                    <h4 className="fw-medium mb-20">
+                      <Link
+                        className="hoverLine hoverSecondary"
+                        to={`/product/${product?.slug}`}
+                      >
+                        {product?.name}
+                      </Link>
+                    </h4>
+
+                    <div>
+                      <span className="fw-normal position-relative fs-3">
+                        ${product?.price}
+                        <span
+                          style={{
+                            top: "-1.2rem",
+                            right: "-3rem",
+                            width: "2.8rem",
+                            lineHeight: 1,
+                            padding: "2px",
+                          }}
+                          className="bgTheme position-absolute fs-12 lightColor2 text-center rounded-1"
+                        >
+                          {product?.cartQuantity}x
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                  <div className="d-flex align-items-center gap-3">
+                    <span className="fs-3 fontPoppins fw-semibold">
+                      {(product?.price * product?.cartQuantity).toLocaleString("en-US", {
+                        style: "currency",
+                        currency: "USD",
+                      })}
+                    </span>
+                    <span
+                      onClick={() => removeFromCart(product._id, cart, setCart)}
+                      className="p-2 hoverableOp"
+                      role="button"
+                    >
+                      <IoClose size={22} />
+                    </span>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <h2 className="text-center fs-1">No product in wishlist. 😔</h2>
+            )}
+          </div>
+
+          <div className="border-top pt-4 mt-5">
+            <h4 className="fw-normal themeColorSecondaryDark">Subtotal</h4>
+            <h1 className="fw-bold">
+              {totalPrice.toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+              })}
+            </h1>
+
+            <Link
+              onClick={() => setShowWishlistOffcanvas(!showWishlistOffcanvas)}
+              to="/wishlist"
+              className="btn btnDark w-100 py-10 rounded-pill mt-3"
+            >
+              View wishlist
+            </Link>
+          </div>
+        </Offcanvas.Body>
+      </Offcanvas>
+
       <Navbar
         className="mb-3 mb-sm-4 position-sticky top-0 start-0 static-lg"
         bg="white"
@@ -427,11 +525,12 @@ const MainMenu = ({ categories, subcategories }) => {
             <div className="menuIcons d-flex justify-content-center align-items-center mt-2 mt-lg-0">
               <div className="topbar-icon-group me-20">
                 <span
+                  onClick={() => setShowWishlistOffcanvas(true)}
                   role="button"
                   className="floating-text-icon d-inline-block position-relative hoverable"
                 >
                   <AiOutlineHeart size={22} />
-                  <span className="floating-num">0</span>
+                  <span className="floating-num">{wishlist.length}</span>
                 </span>
               </div>
               <div className="topbar-icon-group me-20">

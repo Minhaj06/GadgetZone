@@ -9,6 +9,8 @@ import { BsFillEyeFill, BsFillTrashFill } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import StatusBadge from "../../../components/statusBadge/StatusBadge";
 import Skeleton from "react-loading-skeleton";
+import { Popconfirm } from "antd";
+import Swal from "sweetalert2";
 
 const Products = () => {
   const { auth, setAuth, isLoading, setIsLoading } = useAuth();
@@ -30,6 +32,54 @@ const Products = () => {
     })();
   }, []);
 
+  const handleDelete = async (id) => {
+    const swal = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btnPrimary me-4",
+      },
+      buttonsStyling: false,
+    });
+    swal
+      .fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true,
+      })
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            setIsLoading(true);
+            const { data } = await axios.delete(`product/${id}`);
+            const resProducts = products.filter((product) => product._id != id);
+            setProducts(resProducts);
+            swal.fire({
+              title: "Deleted!",
+              text: "Product has been deleted.",
+              icon: "success",
+            });
+            setIsLoading(false);
+          } catch (err) {
+            swal.fire({
+              title: "Error!",
+              text: "There was an issue deleting product.",
+              icon: "error",
+            });
+            setIsLoading(false);
+          }
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          swal.fire({
+            title: "Cancelled",
+            text: "Product is safe :)",
+            icon: "error",
+          });
+        }
+      });
+  };
   return (
     <div>
       <div className="d-sm-flex justify-content-between align-items-center gap-5 mb-4">
@@ -128,7 +178,10 @@ const Products = () => {
                       <button className="btn btn-warning btn-lg">
                         <AiFillEdit size={18} />
                       </button>
-                      <button className="btn btn-danger btn-lg">
+                      <button
+                        onClick={() => handleDelete(product?._id)}
+                        className="btn btn-danger btn-lg"
+                      >
                         <BsFillTrashFill size={18} />
                       </button>
                     </div>

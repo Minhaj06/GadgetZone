@@ -6,19 +6,24 @@ import "./productCard.css";
 import productPlaceholderImg from "../../../assets/images/productPlaceholder.png";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { useCart } from "../../../context/cart";
 import Stars from "../../stars/Stars";
-import { Modal } from "antd";
-import { addToCart } from "../../../utils/cart";
 import { FaMinus, FaPlus } from "react-icons/fa";
+import { Modal } from "antd";
+import { useCart } from "../../../context/cart";
+import { useWishlist } from "../../../context/wishlist";
+import { addToCart } from "../../../utils/cart";
+import { addToWishlist } from "../../../utils/wishlist";
 
 const ProductCard = ({ product, isTrending, listView, fullWidth }) => {
   // Context
   const [cart, setCart] = useCart();
+  const [wishlist, setWishlist] = useWishlist();
 
   // state
   const [addToCartModalOpen, setAddToCartModalOpen] = useState(false);
+  const [addToWishlistModalOpen, setAddToWishlistModalOpen] = useState(false);
   const [cartQuantity, setCartQuantity] = useState(1);
+  const [wishlistQuantity, setWishlistQuantity] = useState(1);
 
   const handleBeforeLoadImg = () => {
     return productPlaceholderImg;
@@ -57,7 +62,11 @@ const ProductCard = ({ product, isTrending, listView, fullWidth }) => {
                 />
               </Link>
               <div className="position-absolute top-0 end-0 mt-3 me-3">
-                <span className="productIcon" title="Add to wishlist">
+                <span
+                  className="productIcon"
+                  title="Add to wishlist"
+                  onClick={() => addToWishlist(product, wishlist, setWishlist)}
+                >
                   <AiOutlineHeart size={17} />
                 </span>
                 <span
