@@ -54,7 +54,7 @@ const AllRoutes = () => {
               <Route element={<PrivateRoute />}>
                 <Route path="/checkout/payment" element={<Payment />} />
               </Route>
-              {/* <Route path="/calculate" element={<Calculate />} /> */}
+              <Route path="/calculate" element={<Calculate />} />
               <Route path="/search" element={<Search />} />
               <Route path="/product/:slug" element={<ProductDetails />} />
 
