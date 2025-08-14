@@ -54,7 +54,7 @@ const Calculate = () => {
             <div className="col-xxl-7 col-xl-8 col-lg-9 mx-auto">
               <div className="bg-light p-4 rounded-3 border shadow mb-5">
                 <h1 className="text-center display-5 themeColorSecondaryDark fw-medium mb-0">
-                  <strong>বিক্রয় হিসাব</strong>
+                  {/* <strong>বিক্রয় হিসাব</strong> */}
                 </h1>
               </div>
               <div className="bg-light p-5 rounded-3 border shadow">
