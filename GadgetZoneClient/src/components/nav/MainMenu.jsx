@@ -21,8 +21,7 @@ const mainMenuItems = [
   { _id: 4, label: "Women", to: "/category/women", megaMenu: true },
   { _id: 5, label: "Men", to: "/category/men" },
   { _id: 6, label: "Sports", to: "/category/sports" },
-  { _id: 7, label: "Calculate", to: "/calculate" },
-  { _id: 8, label: "Test", to: "/test" },
+  // { _id: 7, label: "Calculate", to: "/calculate" },
 ];
 
 const MainMenu = ({ categories, subcategories }) => {

@@ -3,6 +3,7 @@ import { Upload, Modal, Button, Input, Form, Select, Row, Col } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useAuth } from "../../../context/auth";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const { Option } = Select;
 
@@ -71,9 +72,31 @@ const ProductUpload = () => {
     form.setFieldsValue({ subcategory: null });
   };
 
-  const onFinish = (values) => {
-    console.log("Submitted values:", values);
-    console.log("Selected images:", photoList);
+  const handleSubmit = async (values) => {
+    const formData = new FormData();
+    formData.append("name", values.name);
+    formData.append("description", values.description);
+    formData.append("price", values.price);
+    formData.append("category", values.category);
+    formData.append("subcategory", values.subcategory);
+    formData.append("shipping", values.shipping);
+    formData.append("quantity", values.quantity);
+
+    photoList.forEach((file) => {
+      formData.append("photos", file.originFileObj);
+    });
+
+    const { data } = await axios.post(`/product`, formData);
+
+    if (data?.error) {
+      toast.error(data.error);
+    } else {
+      toast.success("Product added successfully");
+      form.resetFields();
+      setPhotoList([]);
+      setSelectedCategory(null);
+      setFilteredSubcategories([]);
+    }
   };
 
   // const initialValues = {
@@ -104,7 +127,7 @@ const ProductUpload = () => {
     <div>
       <Form
         form={form}
-        onFinish={onFinish}
+        onFinish={handleSubmit}
         layout="vertical"
         // initialValues={initialValues}
         labelCol={{ style: { fontWeight: 600 } }}
@@ -241,7 +264,7 @@ const ProductUpload = () => {
           <Col xs={24}>
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                Submit
+                Add Product
               </Button>
             </Form.Item>
           </Col>
