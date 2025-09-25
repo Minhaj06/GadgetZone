@@ -33,6 +33,7 @@ const ProductDetails = lazy(() => import("./pages/productDetails/ProductDetails"
 const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
 const Category = lazy(() => import("./pages/admin/Category"));
 const Product = lazy(() => import("./pages/admin/product/Product"));
+const ProductUpdate = lazy(() => import("./pages/admin/product/ProductUpdate"));
 const Products = lazy(() => import("./pages/admin/product/Products"));
 
 const AllRoutes = () => {
@@ -78,6 +79,7 @@ const AllRoutes = () => {
                 <Route path="" element={<AdminDashboard />} />
                 <Route path="category" element={<Category />} />
                 <Route path="product" element={<Product />} />
+                <Route path="product/:slug" element={<ProductUpdate />} />
                 <Route path="products" element={<Products />} />
               </Route>
             </Route>

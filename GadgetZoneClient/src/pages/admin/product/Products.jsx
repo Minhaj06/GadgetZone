@@ -55,7 +55,7 @@ const Products = () => {
           try {
             setIsLoading(true);
             const { data } = await axios.delete(`product/${id}`);
-            const resProducts = products.filter((product) => product._id != id);
+            const resProducts = products.filter((product) => product._id !== id);
             setProducts(resProducts);
             swal.fire({
               title: "Deleted!",
@@ -175,7 +175,10 @@ const Products = () => {
                       >
                         <BsFillEyeFill size={18} />
                       </button>
-                      <button className="btn btn-warning btn-lg">
+                      <button
+                        onClick={() => navigate(`../product/${product?.slug}`)}
+                        className="btn btn-warning btn-lg"
+                      >
                         <AiFillEdit size={18} />
                       </button>
                       <button
