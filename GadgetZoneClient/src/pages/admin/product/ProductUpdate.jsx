@@ -47,6 +47,17 @@ const ProductUpload = () => {
       if (product?.category?._id) {
         handleCategoryChange(product?.category?._id, product?.subcategory?._id);
       }
+
+      // Show previous photos
+      if (product?.photos?.length) {
+        const photos = product.photos.map((p, index) => ({
+          uid: index,
+          name: p.public_id,
+          status: "done",
+          url: p.url,
+        }));
+        setPhotoList(photos);
+      }
     }
   }, [product]);
 
