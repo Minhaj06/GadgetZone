@@ -5,6 +5,9 @@ import { useAuth } from "../../../context/auth";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
+import { use } from "react";
+import loadPhotos from "../../../utils/loadPhotos";
+import arrayBufferToBase64 from "../../../utils/arrayBufferToBase64";
 
 const { Option } = Select;
 
@@ -32,7 +35,7 @@ const ProductUpload = () => {
 
   // When product is loaded → set form values
   useEffect(() => {
-    if (product) {
+    if (product?._id) {
       form.setFieldsValue({
         name: product?.name,
         description: product?.description,
@@ -48,18 +51,24 @@ const ProductUpload = () => {
         handleCategoryChange(product?.category?._id, product?.subcategory?._id);
       }
 
-      // Show previous photos
-      if (product?.photos?.length) {
-        const photos = product.photos.map((p, index) => ({
-          uid: index,
-          name: p.public_id,
-          status: "done",
-          url: p.url,
-        }));
-        setPhotoList(photos);
-      }
+      // Load photos
+      (async () => {
+        const photos = await loadPhotos(product._id);
+        setPhotoList(
+          photos.map((photo, index) => ({
+            uid: index,
+            name: `photo-${index}.jpg`,
+            status: "done",
+            url: arrayBufferToBase64(photo?.data?.data),
+          }))
+        );
+      })();
     }
-  }, [product]);
+  }, [product?._id]);
+
+  useEffect(() => {
+    console.log(photoList);
+  }, [photoList]);
 
   // Load categories & subcategories
   useEffect(() => {
@@ -262,7 +271,7 @@ const ProductUpload = () => {
                   (a?.label ?? "").toLowerCase().localeCompare((b?.label ?? "").toLowerCase())
                 }
                 placeholder="Select Category"
-                onChange={(value) => handleCategoryChange(value)} // ✅ reset subcategory on change
+                onChange={(value) => handleCategoryChange(value)} // reset subcategory on change
               />
             </Form.Item>
           </Col>
