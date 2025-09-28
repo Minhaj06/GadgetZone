@@ -19,6 +19,8 @@ const ProductUpload = () => {
   const [filteredSubcategories, setFilteredSubcategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
+  const [originalPhotos, setOriginalPhotos] = useState([]);
+
   const [form] = Form.useForm();
   const [photoList, setPhotoList] = useState([]);
   const [previewVisible, setPreviewVisible] = useState(false);
@@ -36,6 +38,7 @@ const ProductUpload = () => {
   // When product is loaded → set form values
   useEffect(() => {
     if (product?._id) {
+      console.log("id", product._id);
       form.setFieldsValue({
         name: product?.name,
         description: product?.description,
@@ -51,9 +54,11 @@ const ProductUpload = () => {
         handleCategoryChange(product?.category?._id, product?.subcategory?._id);
       }
 
-      // Load photos
+      // Load & display photos
       (async () => {
         const photos = await loadPhotos(product._id);
+        setOriginalPhotos(photos);
+
         setPhotoList(
           photos.map((photo, index) => ({
             uid: index,
@@ -65,10 +70,6 @@ const ProductUpload = () => {
       })();
     }
   }, [product?._id]);
-
-  useEffect(() => {
-    console.log(photoList);
-  }, [photoList]);
 
   // Load categories & subcategories
   useEffect(() => {
@@ -148,29 +149,40 @@ const ProductUpload = () => {
 
   // Submit handler
   const handleSubmit = async (values) => {
-    const formData = new FormData();
-    formData.append("name", values.name);
-    formData.append("description", values.description);
-    formData.append("price", values.price);
-    formData.append("category", values.category);
-    formData.append("subcategory", values.subcategory);
-    formData.append("shipping", values.shipping);
-    formData.append("quantity", values.quantity);
+    try {
+      console.log("Photo List", photoList);
+      if (photoList.length === 0) {
+        toast.error("Please upload at least one photo.");
+        return;
+      }
 
-    photoList.forEach((file) => {
-      formData.append("photos", file.originFileObj);
-    });
+      const formData = new FormData();
+      formData.append("name", values.name);
+      formData.append("description", values.description);
+      formData.append("price", values.price);
+      formData.append("category", values.category);
+      formData.append("subcategory", values.subcategory);
+      formData.append("shipping", values.shipping);
+      formData.append("quantity", values.quantity);
 
-    const { data } = await axios.post(`/product`, formData);
+      // Only handle photos if admin changed them
+      const hasNewOrRemovedPhotos =
+        photoList.some((file) => file.originFileObj) ||
+        photoList.length !== originalPhotos.length;
 
-    if (data?.error) {
-      toast.error(data.error);
-    } else {
-      toast.success("Product added successfully");
-      form.resetFields();
-      setPhotoList([]);
-      setSelectedCategory(null);
-      setFilteredSubcategories([]);
+      if (hasNewOrRemovedPhotos) {
+        photoList.forEach((file) => {
+          if (file.originFileObj) {
+            // only append new files
+            formData.append("photos", file.originFileObj);
+          }
+        });
+      }
+
+      const { data } = await axios.post(`/product`, formData);
+    } catch (err) {
+      console.log(err);
+      toast.error("Product update failed. Try again.");
     }
   };
 
@@ -198,9 +210,10 @@ const ProductUpload = () => {
           {/* Photos */}
           <Col xs={24}>
             <Form.Item
+              className="text-center"
               label="Photos"
               name="photos"
-              rules={[{ required: true, message: "Please upload at least one photo" }]}
+              // rules={[{ required: true, message: "Please upload at least one photo" }]}
             >
               <Upload
                 className="d-flex justify-content-center"
@@ -329,7 +342,7 @@ const ProductUpload = () => {
           <Col xs={24}>
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                {slug ? "Update Product" : "Add Product"}
+                Update Product
               </Button>
             </Form.Item>
           </Col>

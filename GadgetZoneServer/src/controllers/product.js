@@ -146,7 +146,8 @@ exports.read = async (req, res) => {
   try {
     const product = await Product.findOne({ slug: req.params.slug })
       .select("-photos")
-      .populate("category");
+      .populate("category")
+      .populate("subcategory");
 
     res.json(product);
   } catch (err) {
@@ -330,7 +331,7 @@ exports.update = async (req, res) => {
       { new: true }
     );
 
-    if (receivedPhotos) {
+    if (receivedPhotos.length > 0) {
       product.photos = []; // Clear existing photos
       for (let i = 0; i < receivedPhotos.length; i++) {
         const photo = receivedPhotos[i];
@@ -343,6 +344,8 @@ exports.update = async (req, res) => {
         };
         product.photos.push(photoData);
       }
+    } else {
+      return res.json({ error: "At least one image is required" });
     }
 
     await product.save();

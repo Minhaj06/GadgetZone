@@ -73,29 +73,34 @@ const ProductUpload = () => {
   };
 
   const handleSubmit = async (values) => {
-    const formData = new FormData();
-    formData.append("name", values.name);
-    formData.append("description", values.description);
-    formData.append("price", values.price);
-    formData.append("category", values.category);
-    formData.append("subcategory", values.subcategory);
-    formData.append("shipping", values.shipping);
-    formData.append("quantity", values.quantity);
+    try {
+      const formData = new FormData();
+      formData.append("name", values.name);
+      formData.append("description", values.description);
+      formData.append("price", values.price);
+      formData.append("category", values.category);
+      formData.append("subcategory", values.subcategory);
+      formData.append("shipping", values.shipping);
+      formData.append("quantity", values.quantity);
 
-    photoList.forEach((file) => {
-      formData.append("photos", file.originFileObj);
-    });
+      photoList.forEach((file) => {
+        formData.append("photos", file.originFileObj);
+      });
 
-    const { data } = await axios.post(`/product`, formData);
+      const { data } = await axios.post(`/product`, formData);
 
-    if (data?.error) {
-      toast.error(data.error);
-    } else {
-      toast.success("Product added successfully");
-      form.resetFields();
-      setPhotoList([]);
-      setSelectedCategory(null);
-      setFilteredSubcategories([]);
+      if (data?.error) {
+        toast.error(data.error);
+      } else {
+        toast.success("Product added successfully");
+        form.resetFields();
+        setPhotoList([]);
+        setSelectedCategory(null);
+        setFilteredSubcategories([]);
+      }
+    } catch (err) {
+      console.lgog(err);
+      toast.error("Failed to add product");
     }
   };
 
