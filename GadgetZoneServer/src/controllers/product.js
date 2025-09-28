@@ -76,8 +76,8 @@ exports.create = async (req, res) => {
 
     // Handle multiple files
     const receivedPhotos = Array.isArray(photos) ? photos : [photos];
-    if (receivedPhotos.length > 6) {
-      return res.json({ error: "Exceeded the maximum number of images allowed (6)." });
+    if (receivedPhotos.length > 4) {
+      return res.json({ error: "Exceeded the maximum number of images allowed (4)." });
     }
 
     // Validation
@@ -293,8 +293,8 @@ exports.update = async (req, res) => {
 
     // Handle multiple files
     const receivedPhotos = Array.isArray(photos) ? photos : [photos];
-    if (receivedPhotos.length > 6) {
-      return res.json({ error: "Exceeded the maximum number of images allowed (6)." });
+    if (receivedPhotos.length > 4) {
+      return res.json({ error: "Exceeded the maximum number of images allowed (4)." });
     }
 
     // Validation
@@ -313,11 +313,13 @@ exports.update = async (req, res) => {
         return res.json({ error: "Shipping is required" });
     }
 
-    // Find the existing product by name
-    const existingProduct = await Product.findOne({ name });
+    // Find the existing product by name excluding the current product
+    const existingProduct = await Product.findOne({
+      name,
+      _id: { $ne: req.params.productId },
+    });
 
-    // Check if the existing product is different from the one being updated
-    if (existingProduct && existingProduct._id.toString() !== req.params.productId) {
+    if (existingProduct) {
       return res.json({ error: "Product with this name already exists" });
     }
 

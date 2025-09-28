@@ -38,7 +38,6 @@ const ProductUpload = () => {
   // When product is loaded → set form values
   useEffect(() => {
     if (product?._id) {
-      console.log("id", product._id);
       form.setFieldsValue({
         name: product?.name,
         description: product?.description,
@@ -149,8 +148,8 @@ const ProductUpload = () => {
 
   // Submit handler
   const handleSubmit = async (values) => {
+    setIsLoading(true);
     try {
-      console.log("Photo List", photoList);
       if (photoList.length === 0) {
         toast.error("Please upload at least one photo.");
         return;
@@ -179,10 +178,21 @@ const ProductUpload = () => {
         });
       }
 
-      const { data } = await axios.post(`/product`, formData);
+      const { data } = await axios.put(`/product/${product?._id}`, formData);
+
+      console.log(data);
+      if (data?.error) {
+        toast.error(data.error);
+      } else {
+        toast.success("Product updated successfully");
+        setProduct(data);
+      }
+      console.log(data);
     } catch (err) {
       console.log(err);
       toast.error("Product update failed. Try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 

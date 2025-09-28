@@ -73,6 +73,7 @@ const ProductUpload = () => {
   };
 
   const handleSubmit = async (values) => {
+    setIsLoading(true);
     try {
       const formData = new FormData();
       formData.append("name", values.name);
@@ -101,6 +102,8 @@ const ProductUpload = () => {
     } catch (err) {
       console.lgog(err);
       toast.error("Failed to add product");
+    } finally {
+      setIsLoading(false);
     }
   };
 
