@@ -4,10 +4,11 @@ import { PlusOutlined } from "@ant-design/icons";
 import { useAuth } from "../../../context/auth";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { use } from "react";
 import loadPhotos from "../../../utils/loadPhotos";
 import arrayBufferToBase64 from "../../../utils/arrayBufferToBase64";
+import base64ToFile from "../../../utils/base64ToFile";
 
 const { Option } = Select;
 
@@ -29,6 +30,7 @@ const ProductUpload = () => {
 
   // hooks
   const { slug } = useParams();
+  const navigate = useNavigate();
 
   // Load product if slug exists
   useEffect(() => {
@@ -55,17 +57,24 @@ const ProductUpload = () => {
 
       // Load & display photos
       (async () => {
-        const photos = await loadPhotos(product._id);
-        setOriginalPhotos(photos);
-
-        setPhotoList(
-          photos.map((photo, index) => ({
-            uid: index,
-            name: `photo-${index}.jpg`,
-            status: "done",
-            url: arrayBufferToBase64(photo?.data?.data),
-          }))
-        );
+        setIsLoading(true);
+        try {
+          const photos = await loadPhotos(product._id);
+          setOriginalPhotos(photos);
+          console.log("Loaded Photos", photos);
+          setPhotoList(
+            photos.map((photo, index) => ({
+              uid: index,
+              name: `photo-${index}.jpg`,
+              status: "done",
+              url: arrayBufferToBase64(photo?.data?.data),
+            }))
+          );
+        } catch (err) {
+          console.log(err);
+        } finally {
+          setIsLoading(false);
+        }
       })();
     }
   }, [product?._id]);
@@ -172,22 +181,18 @@ const ProductUpload = () => {
       if (hasNewOrRemovedPhotos) {
         photoList.forEach((file) => {
           if (file.originFileObj) {
-            // only append new files
             formData.append("photos", file.originFileObj);
+          } else if (file.url?.startsWith("data:image")) {
+            const convertedFile = base64ToFile(file.url, file?.name);
+            formData.append("photos", convertedFile);
           }
         });
       }
 
       const { data } = await axios.put(`/product/${product?._id}`, formData);
-
-      console.log(data);
-      if (data?.error) {
-        toast.error(data.error);
-      } else {
-        toast.success("Product updated successfully");
-        setProduct(data);
-      }
-      console.log(data);
+      toast.success("Product updated successfully");
+      setProduct(data);
+      navigate("../products");
     } catch (err) {
       console.log(err);
       toast.error("Product update failed. Try again.");

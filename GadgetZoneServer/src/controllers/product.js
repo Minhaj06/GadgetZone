@@ -283,19 +283,8 @@ exports.remove = async (req, res) => {
 // Update Product With Multiple Image
 exports.update = async (req, res) => {
   try {
-    // console.log(req.fields);
-    // console.log(req.files);
-
     const { name, description, price, category, subcategory, quantity, isFeatured, shipping } =
       req.fields;
-
-    const { photos } = req.files;
-
-    // Handle multiple files
-    const receivedPhotos = Array.isArray(photos) ? photos : [photos];
-    if (receivedPhotos.length > 4) {
-      return res.json({ error: "Exceeded the maximum number of images allowed (4)." });
-    }
 
     // Validation
     switch (true) {
@@ -313,41 +302,44 @@ exports.update = async (req, res) => {
         return res.json({ error: "Shipping is required" });
     }
 
-    // Find the existing product by name excluding the current product
+    // Duplicate check
     const existingProduct = await Product.findOne({
       name,
       _id: { $ne: req.params.productId },
     });
-
     if (existingProduct) {
       return res.json({ error: "Product with this name already exists" });
     }
 
-    // Update Product
+    // Update product fields first
     const product = await Product.findByIdAndUpdate(
       req.params.productId,
-      {
-        ...req.fields,
-        slug: slugify(name),
-      },
+      { ...req.fields, slug: slugify(name) },
       { new: true }
     );
+    // --- Handle Photos only if they exist ---
+    if (req.files && req.files.photos) {
+      const { photos } = req.files;
+      const receivedPhotos = Array.isArray(photos) ? photos : [photos];
 
-    if (receivedPhotos.length > 0) {
-      product.photos = []; // Clear existing photos
+      if (receivedPhotos.length > 4) {
+        return res.json({ error: "Exceeded the maximum number of images allowed (4)." });
+      }
+
+      product.photos = []; // Clear old photos
       for (let i = 0; i < receivedPhotos.length; i++) {
         const photo = receivedPhotos[i];
+
         if (photo.size > 1000000) {
           return res.json({ error: "Each image should be less than 1mb in size" });
         }
+
         const photoData = {
           data: fs.readFileSync(photo.path),
           contentType: photo.type,
         };
         product.photos.push(photoData);
       }
-    } else {
-      return res.json({ error: "At least one image is required" });
     }
 
     await product.save();
