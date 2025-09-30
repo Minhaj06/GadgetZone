@@ -67,6 +67,18 @@ const AdminMenu = () => {
     getItem("Dashboard", "1", <UserOutlined />, null, () => {
       navigate(admin);
     }),
+
+    // Category Menu
+    getItem("Brand", "sub3", <SiBrandfolder size={18} />, [
+      getItem("Create Brand", "6", <BiAddToQueue size={18} />, null, () => {
+        navigate(admin + "/brand");
+      }),
+      getItem("All Brands", "7", <MdManageSearch size={18} />, null, () => {
+        navigate(admin + "/brands");
+      }),
+    ]),
+
+    // Category Menu
     getItem("Category", "sub1", <BiCategory size={18} />, [
       getItem("Create Category", "2", <BiAddToQueue size={18} />, null, () => {
         navigate(admin + "/category");
@@ -84,14 +96,8 @@ const AdminMenu = () => {
         }),
       ]),
     ]),
-    getItem("Brand", "sub3", <SiBrandfolder size={18} />, [
-      getItem("Create Brand", "6", <BiAddToQueue size={18} />, null, () => {
-        navigate(admin + "/brand");
-      }),
-      getItem("All Brands", "7", <MdManageSearch size={18} />, null, () => {
-        navigate(admin + "/brands");
-      }),
-    ]),
+
+    // Product Menu
     getItem("Product", "sub4", <FaBoxOpen size={18} />, [
       getItem("Create Product", "8", <BiAddToQueue size={18} />, null, () => {
         navigate(admin + "/product");

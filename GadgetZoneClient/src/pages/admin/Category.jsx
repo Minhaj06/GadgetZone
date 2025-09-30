@@ -1,9 +1,9 @@
 import Jumbotron from "../../components/cards/Jumbotron";
 import { useAuth } from "../../context/auth";
 
-function Category() {
+const Category = () => {
   // context
-  const [auth, setAuth] = useAuth();
+  const { auth, setIsLoading } = useAuth();
 
   return (
     <>
@@ -24,6 +24,6 @@ function Category() {
       </div>
     </>
   );
-}
+};
 
 export default Category;

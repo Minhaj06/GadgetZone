@@ -317,6 +317,7 @@ exports.update = async (req, res) => {
       { ...req.fields, slug: slugify(name) },
       { new: true }
     );
+
     // --- Handle Photos only if they exist ---
     if (req.files && req.files.photos) {
       const { photos } = req.files;

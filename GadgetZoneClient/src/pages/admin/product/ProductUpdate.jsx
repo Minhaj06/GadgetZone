@@ -12,7 +12,7 @@ import base64ToFile from "../../../utils/base64ToFile";
 
 const { Option } = Select;
 
-const ProductUpload = () => {
+const ProductUpdate = () => {
   const { setIsLoading } = useAuth();
 
   const [categories, setCategories] = useState([]);
@@ -61,7 +61,6 @@ const ProductUpload = () => {
         try {
           const photos = await loadPhotos(product._id);
           setOriginalPhotos(photos);
-          console.log("Loaded Photos", photos);
           setPhotoList(
             photos.map((photo, index) => ({
               uid: index,
@@ -82,8 +81,8 @@ const ProductUpload = () => {
   // Load categories & subcategories
   useEffect(() => {
     (async () => {
+      setIsLoading(true);
       try {
-        setIsLoading(true);
         const { data } = await axios.get(`/categories`);
         setCategories(data);
       } catch (err) {
@@ -94,8 +93,8 @@ const ProductUpload = () => {
     })();
 
     (async () => {
+      setIsLoading(true);
       try {
-        setIsLoading(true);
         const { data } = await axios.get(`/subcategories`);
         setSubcategories(data);
       } catch (err) {
@@ -108,8 +107,8 @@ const ProductUpload = () => {
 
   // Load product details
   const loadProduct = async () => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       const { data } = await axios.get(`/product/${slug}`);
       setProduct(data);
     } catch (err) {
@@ -367,4 +366,4 @@ const ProductUpload = () => {
   );
 };
 
-export default ProductUpload;
+export default ProductUpdate;
