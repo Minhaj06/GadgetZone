@@ -1,5 +1,5 @@
-import Jumbotron from "../../components/cards/Jumbotron";
-import { useAuth } from "../../context/auth";
+import Jumbotron from "../../../components/cards/Jumbotron";
+import { useAuth } from "../../../context/auth";
 
 const Category = () => {
   // context

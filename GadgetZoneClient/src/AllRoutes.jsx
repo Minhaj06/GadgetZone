@@ -1,6 +1,7 @@
 import React, { Fragment, lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LazyLoader from "./components/LazyLoader";
+import Categories from "./pages/admin/category/Categories";
 // import Calculate from "./pages/Calculate";
 
 const Home = lazy(() => import("./pages/Home"));
@@ -31,7 +32,7 @@ const AdminLayout = lazy(() => import("./layout/adminLayout/AdminLayout"));
 const ProductDetails = lazy(() => import("./pages/productDetails/ProductDetails"));
 
 const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
-const Category = lazy(() => import("./pages/admin/Category"));
+const Category = lazy(() => import("./pages/admin/category/Category"));
 const Product = lazy(() => import("./pages/admin/product/ProductUpload"));
 const ProductUpdate = lazy(() => import("./pages/admin/product/ProductUpdate"));
 const Products = lazy(() => import("./pages/admin/product/Products"));
@@ -79,6 +80,7 @@ const AllRoutes = () => {
                 <Route path="" element={<AdminDashboard />} />
 
                 {/* Category Routes */}
+                <Route path="categories" element={<Categories />} />
                 <Route path="category" element={<Category />} />
 
                 {/* Product Routes */}
